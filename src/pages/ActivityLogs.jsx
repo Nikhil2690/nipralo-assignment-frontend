@@ -8,9 +8,21 @@ export default function ActivityLogs() {
 
   useEffect(() => {
     API.get("/activity-log")
-      .then(res => setLogs(res.data))
+      .then(res => {setLogs(res.data), 
+      console.log(res)})
       .catch(err => console.error(err))
   }, [])
+
+  const formatAction = (action) => {
+  const map = {
+    CREATE: "created",
+    UPDATE: "updated",
+    DELETE: "deleted",
+    SHARE: "shared"
+  }
+
+  return map[action] || action.toLowerCase()
+}
 
   return (
     <>
@@ -25,9 +37,9 @@ export default function ActivityLogs() {
               <div key={log.id} className="p-4 border rounded bg-white shadow">
                 <p>
                   <span className="font-semibold">{log.user.email}</span>{" "}
-                  {log.action} note{" "}
+                  {formatAction(log.action)} note{" "}
                   <span className="font-semibold">{log.note.title}</span>{" "}
-                  at {new Date(log.createdAt).toLocaleString()}
+                  at {new Date(log.timestamp).toLocaleString()}
                 </p>
               </div>
             ))}
