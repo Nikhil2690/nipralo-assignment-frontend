@@ -7,7 +7,7 @@ export default function ActivityLogs() {
   const [logs, setLogs] = useState([])
 
   useEffect(() => {
-    API.get("/activity-logs")
+    API.get("/activity-log")
       .then(res => setLogs(res.data))
       .catch(err => console.error(err))
   }, [])
