@@ -7,13 +7,26 @@ export default function Register() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+const handleSubmit = async (e) => {
+  
+  e.preventDefault()
+
+  try {
+    setLoading(true);
     await API.post("/auth/register", { name, email, password })
     navigate("/")
+  } catch (err) {
+    console.log(err.response?.data)
+    alert(err.response?.data?.message || "Registration failed")
+  } finally {
+    setLoading(false)
   }
+}
+
+
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -45,8 +58,8 @@ export default function Register() {
           onChange={e => setPassword(e.target.value)}
         />
 
-        <button className="w-full bg-green-600 text-white py-2 rounded">
-          Register
+        <button disabled={loading} className="w-full bg-green-600 text-white py-2 rounded">
+          {loading ? "Registering..." : "Register"}
         </button>
       </form>
     </div>

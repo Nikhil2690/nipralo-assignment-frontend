@@ -8,13 +8,16 @@ export default function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const { login } = useContext(AuthContext)
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
     const res = await API.post("/auth/login", { email, password })
     login(res.data)
     navigate("/dashboard")
+    setLoading(false)
   }
 
   return (
@@ -38,8 +41,8 @@ export default function Login() {
           onChange={e => setPassword(e.target.value)}
         />
 
-        <button className="w-full bg-blue-600 text-white py-2 rounded">
-          Login
+        <button disabled={loading} className="w-full bg-blue-600 text-white py-2 rounded">
+          {loading ? "Logging in..." : "Login"}
         </button>
 
         <p className="text-sm text-center">
